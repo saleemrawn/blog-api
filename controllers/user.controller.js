@@ -83,9 +83,35 @@ const createUser = async (req, res, next) => {
   }
 };
 
+const updateUser = async (req, res, next) => {
+  try {
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ success: false, errors: errors.array() });
+    }
+
+    const { firstName, lastName, password, role } = matchedData(req);
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const user = await userRepository.updateUser({
+      userId: Number(req.params.userId),
+      firstName,
+      lastName,
+      password: hashedPassword,
+      role: role ?? "USER",
+    });
+
+    res.json({ success: true, data: user });
+  } catch (error) {
+    next(error);
+  }
+};
+
 export default {
   getAllUsers,
   getUserById,
   createUser,
+  updateUser,
   userValidators,
 };
