@@ -1,4 +1,38 @@
 import userRepository from "../repositories/user.repository.js";
+import bcrypt from "bcryptjs";
+import { body, validationResult, matchedData } from "express-validator";
+
+const userValidators = [
+  body("firstName")
+    .trim()
+    .notEmpty()
+    .withMessage("First name is required")
+    .isAlpha(undefined, { ignore: "'-." })
+    .withMessage("First name can only contain letters, apostrophes ('), hyphen (-) or period (.)"),
+  body("lastName")
+    .trim()
+    .notEmpty()
+    .withMessage("Last name is required")
+    .isAlpha(undefined, { ignore: "'-." })
+    .withMessage("Last name can only contain letters, apostrophes ('), hyphen (-) or period (.)"),
+  body("username")
+    .trim()
+    .notEmpty()
+    .withMessage("Username is required")
+    .isAlphanumeric()
+    .withMessage("Username can only contain letters, numbers")
+    .isLength({ min: 6 })
+    .withMessage("Username should be minimum 6 characters"),
+  body("password")
+    .trim()
+    .notEmpty()
+    .withMessage("Password is required")
+    .isStrongPassword()
+    .withMessage(
+      "Password should contain at least: 8 characters, one uppercase letter, one number, one special character",
+    ),
+  body("role").optional().isIn(["USER", "AUTHOR", "ADMIN"]).withMessage("Invalid role"),
+];
 
 const getAllUsers = async (req, res, next) => {
   try {
@@ -24,7 +58,34 @@ const getUserById = async (req, res, next) => {
   }
 };
 
+const createUser = async (req, res, next) => {
+  try {
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ success: false, errors: errors.array() });
+    }
+
+    const { firstName, lastName, username, password, role } = matchedData(req);
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const user = await userRepository.createUser({
+      firstName,
+      lastName,
+      username,
+      password: hashedPassword,
+      role: role ?? "USER",
+    });
+
+    res.status(201).json({ success: true, data: user });
+  } catch (error) {
+    next(error);
+  }
+};
+
 export default {
   getAllUsers,
   getUserById,
+  createUser,
+  userValidators,
 };

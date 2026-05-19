@@ -14,7 +14,22 @@ const getUserById = async (userId) => {
   return user;
 };
 
+const createUser = async ({ firstName, lastName, username, password, role }) => {
+  const user = await prisma.user.create({
+    data: {
+      firstName,
+      lastName,
+      username,
+      password,
+      role,
+    },
+  });
+
+  return user;
+};
+
 export default {
   getAllUsers,
   getUserById,
+  createUser,
 };
