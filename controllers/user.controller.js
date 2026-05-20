@@ -89,16 +89,20 @@ const createUser = async (req, res, next) => {
 const updateUser = async (req, res, next) => {
   try {
     const errors = validationResult(req);
-
     if (!errors.isEmpty()) {
       return res.status(400).json({ success: false, errors: errors.array() });
+    }
+
+    const userId = parseInt(req.params.userId);
+    if (isNaN(userId)) {
+      return res.status(400).json({ success: false, message: "Invalid user ID" });
     }
 
     const { firstName, lastName, password, role } = matchedData(req);
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const user = await userRepository.updateUser({
-      userId: Number(req.params.userId),
+      userId,
       firstName,
       lastName,
       password: hashedPassword,
