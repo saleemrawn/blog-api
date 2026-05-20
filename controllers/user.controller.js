@@ -45,9 +45,12 @@ const getAllUsers = async (req, res, next) => {
 
 const getUserById = async (req, res, next) => {
   try {
-    const userId = Number(req.params.userId);
-    const user = await userRepository.getUserById(userId);
+    const userId = parseInt(req.params.userId);
+    if (isNaN(userId)) {
+      return res.status(400).json({ success: false, message: "Invalid user ID" });
+    }
 
+    const user = await userRepository.getUserById(userId);
     if (!user) {
       return res.status(404).json({ success: false, message: "User not found" });
     }
