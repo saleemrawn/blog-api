@@ -14,6 +14,11 @@ const getUserById = async (userId) => {
   return user;
 };
 
+const getUserByUsername = async (username) => {
+  const user = await prisma.user.findUnique({ where: { username } });
+  return user;
+};
+
 const createUser = async ({ firstName, lastName, username, password, role }) => {
   const user = await prisma.user.create({
     data: {
@@ -54,6 +59,7 @@ const deleteUser = async (userId) => {
 export default {
   getAllUsers,
   getUserById,
+  getUserByUsername,
   createUser,
   updateUser,
   deleteUser,
