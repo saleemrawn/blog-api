@@ -1,0 +1,39 @@
+import passport from "passport";
+import jwt from "jsonwebtoken";
+
+const login = (req, res, next) => {
+  passport.authenticate("local", (err, user, info, status) => {
+    if (err) return next(err);
+
+    if (!user) {
+      return res.json({ success: false, message: "Authentication Failed" });
+    }
+
+    const token = jwt.sign({ user }, process.env.JWT_SECRET, { expiresIn: "1h" });
+    res.json({ success: true, message: "Authentication Successful", token: `Bearer ${token}` });
+  })(req, res, next);
+};
+
+const authenticateJWT = (req, res, next) => {
+  return new Promise((resolve, reject) => {
+    passport.authenticate("jwt", { session: false }, (err, user) => {
+      if (err) return reject(err);
+      if (!user) return reject(new Error("Unauthorized"));
+      resolve(user);
+    })(req, res, next);
+  });
+};
+
+const verify = async (req, res, next) => {
+  try {
+    const user = await authenticateJWT(req, res, next);
+    res.json({ success: true, user: { id: user.id, username: user.username } });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export default {
+  login,
+  verify,
+};
