@@ -26,8 +26,8 @@ const authenticateJWT = (req, res, next) => {
 
 const verify = async (req, res, next) => {
   try {
-    const user = await authenticateJWT(req, res, next);
-    res.json({ success: true, user: { id: user.id, username: user.username } });
+    req.user = await authenticateJWT(req, res, next);
+    next();
   } catch (err) {
     next(err);
   }
