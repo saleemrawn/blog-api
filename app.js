@@ -1,4 +1,5 @@
 import "dotenv/config";
+import "./config/passport.js";
 import express from "express";
 import routes from "./routes/routes.js";
 
