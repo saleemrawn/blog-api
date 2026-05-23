@@ -34,7 +34,13 @@ passport.use(
         return done(null, false, { message: "User not found" });
       }
 
-      return done(null, user);
+      return done(null, {
+        id: user.id,
+        username: user.username,
+        fullName: user.fullName,
+        role: user.role,
+        deletedAt: user.deletedAt,
+      });
     } catch (error) {
       done(error, false);
     }
