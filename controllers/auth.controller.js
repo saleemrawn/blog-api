@@ -9,8 +9,16 @@ const login = (req, res, next) => {
       return res.json({ success: false, message: "Authentication Failed" });
     }
 
-    const token = jwt.sign({ user }, process.env.JWT_SECRET, { expiresIn: "1h" });
-    res.json({ success: true, message: "Authentication Successful", token: `Bearer ${token}` });
+    const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
+      expiresIn: "7d",
+    });
+
+    res
+      .cookie("jwt", token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+      })
+      .json({ success: true, message: "Authentication Successful" });
   })(req, res, next);
 };
 
