@@ -24,12 +24,25 @@ passport.use(
   }),
 );
 
-const options = { jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(), secretOrKey: process.env.JWT_SECRET };
+const cookieExtractor = (req) => {
+  let jwt = null;
+
+  if (req && req.cookies) {
+    jwt = req.cookies["jwt"];
+  }
+
+  return jwt;
+};
+
+const options = {
+  jwtFromRequest: cookieExtractor,
+  secretOrKey: process.env.JWT_SECRET,
+};
 
 passport.use(
   new JwtStrategy(options, async (payload, done) => {
     try {
-      const user = await userRepository.getUserById(payload.user.id);
+      const user = await userRepository.getUserById(payload.id);
       if (!user) {
         return done(null, false, { message: "User not found" });
       }
