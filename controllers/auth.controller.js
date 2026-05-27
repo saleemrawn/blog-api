@@ -22,6 +22,20 @@ const login = (req, res, next) => {
   })(req, res, next);
 };
 
+const logout = (req, res, next) => {
+  try {
+    res
+      .clearCookie("jwt", {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+      })
+      .json({ success: true, message: "Logout Successful" });
+  } catch (error) {
+    if (error.name === "TokenExpiredError") return next();
+    next(error);
+  }
+};
+
 const authenticateJWT = (req, res, next) => {
   return new Promise((resolve, reject) => {
     passport.authenticate("jwt", { session: false }, (err, user) => {
@@ -43,5 +57,6 @@ const verify = async (req, res, next) => {
 
 export default {
   login,
+  logout,
   verify,
 };
