@@ -4,6 +4,7 @@ import { Router } from "express";
 
 const router = Router();
 
+router.get("/", postController.getAllPosts);
 router.post(
   "/",
   authController.verify,

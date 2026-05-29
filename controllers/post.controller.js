@@ -18,6 +18,15 @@ const postValidators = [
     .escape(),
 ];
 
+const getAllPosts = async (req, res, next) => {
+  try {
+    const posts = await postRepository.getAllPosts();
+    res.json({ success: true, data: posts });
+  } catch (error) {
+    next(error);
+  }
+};
+
 const createPost = async (req, res, next) => {
   try {
     const errors = validationResult(req);
@@ -40,4 +49,4 @@ const createPost = async (req, res, next) => {
   }
 };
 
-export default { createPost, postValidators };
+export default { getAllPosts, createPost, postValidators };
