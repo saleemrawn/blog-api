@@ -27,6 +27,28 @@ const getAllPosts = async (req, res, next) => {
   }
 };
 
+const getPostById = async (req, res, next) => {
+  try {
+    const postId = parseInt(req.params.postId);
+    if (isNaN(postId)) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Invalid post ID" });
+    }
+
+    const post = await postRepository.getPostById(postId);
+    if (!post) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Post not found" });
+    }
+
+    res.json({ success: true, data: post });
+  } catch (error) {
+    next(error);
+  }
+};
+
 const createPost = async (req, res, next) => {
   try {
     const errors = validationResult(req);
@@ -49,4 +71,4 @@ const createPost = async (req, res, next) => {
   }
 };
 
-export default { getAllPosts, createPost, postValidators };
+export default { getAllPosts, getPostById, createPost, postValidators };

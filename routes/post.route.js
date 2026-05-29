@@ -5,6 +5,8 @@ import { Router } from "express";
 const router = Router();
 
 router.get("/", postController.getAllPosts);
+router.get("/:postId", postController.getPostById);
+
 router.post(
   "/",
   authController.verify,

@@ -8,6 +8,15 @@ const getAllPosts = async () => {
   return posts;
 };
 
+const getPostById = async (postId) => {
+  const post = await prisma.post.findUnique({
+    where: { id: postId },
+    include: { categories: true, comments: true },
+  });
+
+  return post;
+};
+
 const createPost = async ({ title, content, authorId, categories }) => {
   const post = await prisma.post.create({
     data: { title, content, authorId, categories },
@@ -19,5 +28,6 @@ const createPost = async ({ title, content, authorId, categories }) => {
 
 export default {
   getAllPosts,
+  getPostById,
   createPost,
 };
