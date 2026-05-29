@@ -11,6 +11,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use("/api/auth", routes.auth);
 app.use("/api/users", routes.user);
+app.use("/api/posts", routes.post)
 
 app.listen(process.env.PORT, (err) => {
   if (err) {
