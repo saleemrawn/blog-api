@@ -26,8 +26,19 @@ const createPost = async ({ title, content, authorId, categories }) => {
   return post;
 };
 
+const updatePost = async ({ postId, title, content, categories }) => {
+  const post = await prisma.post.update({
+    where: { id: postId },
+    data: { title, content, categories },
+    include: { categories: true, comments: true },
+  });
+
+  return post;
+};
+
 export default {
   getAllPosts,
   getPostById,
   createPost,
+  updatePost,
 };

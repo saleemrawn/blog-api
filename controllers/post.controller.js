@@ -71,4 +71,40 @@ const createPost = async (req, res, next) => {
   }
 };
 
-export default { getAllPosts, getPostById, createPost, postValidators };
+const updatePost = async (req, res, next) => {
+  try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ success: false, errors: errors.array() });
+    }
+
+    const postId = parseInt(req.params.postId);
+    if (isNaN(postId)) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Invalid post ID" });
+    }
+
+    const { title, content } = matchedData(req);
+
+    const post = await postRepository.updatePost({
+      postId,
+      title,
+      content,
+      categories: req.body.categories,
+      authorId: parseInt(req.user.id),
+    });
+
+    return res.json({ success: true, data: post });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export default {
+  getAllPosts,
+  getPostById,
+  createPost,
+  updatePost,
+  postValidators,
+};
