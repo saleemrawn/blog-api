@@ -19,5 +19,6 @@ router.put(
   postController.updatePost,
 );
 router.delete("/:postId", authController.verify, postController.deletePost);
+router.patch("/:postId", authController.verify, postController.undeletePost);
 
 export default router;

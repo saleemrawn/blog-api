@@ -45,10 +45,20 @@ const deletePost = async (postId) => {
   return post;
 };
 
+const undeletePost = async (postId) => {
+  const post = await prisma.post.update({
+    where: { id: postId },
+    data: { deletedAt: null },
+  });
+
+  return post;
+};
+
 export default {
   getAllPosts,
   getPostById,
   createPost,
   updatePost,
   deletePost,
+  undeletePost
 };
