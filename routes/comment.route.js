@@ -18,4 +18,10 @@ router.put(
   commentController.updateComment,
 );
 
+router.delete(
+  "/:postId/comments/:commentId",
+  authController.verify,
+  commentController.deleteComment,
+);
+
 export default router;

@@ -21,7 +21,17 @@ const updateComment = async ({ commentId, content }) => {
   return comment;
 };
 
+const deleteComment = async (commentId) => {
+  const comment = await prisma.comment.update({
+    where: { id: commentId },
+    data: { deletedAt: new Date() },
+  });
+
+  return comment;
+};
+
 export default {
   createComment,
   updateComment,
+  deleteComment,
 };
