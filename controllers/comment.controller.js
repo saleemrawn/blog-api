@@ -39,7 +39,42 @@ const createComment = async (req, res, next) => {
   }
 };
 
+const updateComment = async (req, res, next) => {
+  try {
+    const postId = parseInt(req.params.postId);
+    if (isNaN(postId)) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Invalid post ID" });
+    }
+
+    const commentId = parseInt(req.params.commentId);
+    if (isNaN(commentId)) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Invalid comment ID" });
+    }
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ success: false, errors: errors.array() });
+    }
+
+    const { content } = matchedData(req);
+
+    const comment = await commentRepository.updateComment({
+      commentId,
+      content,
+    });
+
+    res.json({ success: true, data: comment });
+  } catch (error) {
+    next(error);
+  }
+};
+
 export default {
   createComment,
+  updateComment,
   commentValidators,
 };

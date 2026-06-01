@@ -11,4 +11,11 @@ router.post(
   commentController.createComment,
 );
 
+router.put(
+  "/:postId/comments/:commentId",
+  authController.verify,
+  commentController.commentValidators,
+  commentController.updateComment,
+);
+
 export default router;
