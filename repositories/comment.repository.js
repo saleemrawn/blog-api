@@ -30,8 +30,18 @@ const deleteComment = async (commentId) => {
   return comment;
 };
 
+const undeleteComment = async (commentId) => {
+  const comment = await prisma.comment.update({
+    where: { id: commentId },
+    data: { deletedAt: null },
+  });
+
+  return comment;
+};
+
 export default {
   createComment,
   updateComment,
   deleteComment,
+  undeleteComment,
 };

@@ -24,4 +24,10 @@ router.delete(
   commentController.deleteComment,
 );
 
+router.patch(
+  "/:postId/comments/:commentId",
+  authController.verify,
+  commentController.undeleteComment,
+);
+
 export default router;
