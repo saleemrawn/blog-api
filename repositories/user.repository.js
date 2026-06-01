@@ -1,13 +1,17 @@
 import { prisma } from "../prisma/prisma.js";
 
 const getAllUsers = async () => {
-  const users = await prisma.user.findMany({ include: { comments: true } });
+  const users = await prisma.user.findMany({
+    omit: { password: true },
+    include: { comments: true },
+  });
   return users;
 };
 
 const getUserById = async (userId) => {
   const user = await prisma.user.findUnique({
     where: { id: userId },
+    omit: { password: true },
     include: { comments: true },
   });
 
@@ -28,6 +32,7 @@ const createUser = async ({ firstName, lastName, username, password, role }) => 
       password,
       role,
     },
+    omit: { password: true },
   });
 
   return user;
@@ -36,6 +41,7 @@ const createUser = async ({ firstName, lastName, username, password, role }) => 
 const updateUser = async ({ userId, firstName, lastName, password, role }) => {
   const user = await prisma.user.update({
     where: { id: userId },
+    omit: { password: true },
     data: {
       firstName,
       lastName,
@@ -50,6 +56,7 @@ const updateUser = async ({ userId, firstName, lastName, password, role }) => {
 const deleteUser = async (userId) => {
   const user = await prisma.user.update({
     where: { id: userId },
+    omit: { password: true },
     data: { deletedAt: new Date() },
   });
 
@@ -59,6 +66,7 @@ const deleteUser = async (userId) => {
 const undeleteUser = async (userId) => {
   const user = await prisma.user.update({
     where: { id: userId },
+    omit: { password: true },
     data: { deletedAt: null },
   });
 
