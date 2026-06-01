@@ -56,6 +56,15 @@ const deleteUser = async (userId) => {
   return user;
 };
 
+const undeleteUser = async (userId) => {
+  const user = await prisma.user.update({
+    where: { id: userId },
+    data: { deletedAt: null },
+  });
+
+  return user;
+};
+
 export default {
   getAllUsers,
   getUserById,
@@ -63,4 +72,5 @@ export default {
   createUser,
   updateUser,
   deleteUser,
+  undeleteUser,
 };
