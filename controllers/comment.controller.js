@@ -16,7 +16,7 @@ const createComment = async (req, res, next) => {
     const postId = parseInt(req.params.postId);
     if (isNaN(postId)) {
       return res
-        .status(401)
+        .status(400)
         .json({ success: false, message: "Invalid post ID" });
     }
 
