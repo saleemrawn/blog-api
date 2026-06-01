@@ -36,9 +36,19 @@ const updatePost = async ({ postId, title, content, categories }) => {
   return post;
 };
 
+const deletePost = async (postId) => {
+  const post = await prisma.post.update({
+    where: { id: postId },
+    data: { deletedAt: new Date() },
+  });
+
+  return post;
+};
+
 export default {
   getAllPosts,
   getPostById,
   createPost,
   updatePost,
+  deletePost,
 };
