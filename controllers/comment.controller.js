@@ -33,7 +33,11 @@ const createComment = async (req, res, next) => {
       content,
     });
 
-    res.json({ success: true, data: comment });
+    res.json({
+      success: true,
+      message: "Comment created successfully",
+      data: comment,
+    });
   } catch (error) {
     next(error);
   }
@@ -67,7 +71,11 @@ const updateComment = async (req, res, next) => {
       content,
     });
 
-    res.json({ success: true, data: comment });
+    res.json({
+      success: true,
+      message: "Comment updated successfully",
+      data: comment,
+    });
   } catch (error) {
     next(error);
   }
@@ -96,7 +104,11 @@ const deleteComment = async (req, res, next) => {
         .json({ success: false, message: "Comment not found" });
     }
 
-    res.json({ success: true, data: comment });
+    res.json({
+      success: true,
+      message: "Comment deleted successfully",
+      data: comment,
+    });
   } catch (error) {
     next(error);
   }
@@ -125,7 +137,11 @@ const undeleteComment = async (req, res, next) => {
         .json({ success: false, message: "Comment not found" });
     }
 
-    res.json({ success: true, data: comment });
+    res.json({
+      success: true,
+      message: "Comment undeleted successfully",
+      data: comment,
+    });
   } catch (error) {
     next(error);
   }
