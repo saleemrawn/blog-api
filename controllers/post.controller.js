@@ -21,7 +21,11 @@ const postValidators = [
 const getAllPosts = async (req, res, next) => {
   try {
     const posts = await postRepository.getAllPosts();
-    res.json({ success: true, data: posts });
+    res.json({
+      success: true,
+      message: "Posts found successfully",
+      data: posts,
+    });
   } catch (error) {
     next(error);
   }
@@ -43,7 +47,7 @@ const getPostById = async (req, res, next) => {
         .json({ success: false, message: "Post not found" });
     }
 
-    res.json({ success: true, data: post });
+    res.json({ success: true, message: "Post found successfully", data: post });
   } catch (error) {
     next(error);
   }
@@ -65,7 +69,11 @@ const createPost = async (req, res, next) => {
       authorId: parseInt(req.user.id),
     });
 
-    return res.status(201).json({ success: true, data: post });
+    return res.status(201).json({
+      success: true,
+      message: "Post created successfully",
+      data: post,
+    });
   } catch (error) {
     next(error);
   }
@@ -95,7 +103,11 @@ const updatePost = async (req, res, next) => {
       authorId: parseInt(req.user.id),
     });
 
-    return res.json({ success: true, data: post });
+    return res.json({
+      success: true,
+      message: "Post updated successfully",
+      data: post,
+    });
   } catch (error) {
     next(error);
   }
@@ -117,7 +129,11 @@ const deletePost = async (req, res, next) => {
         .json({ success: false, message: "Post not found" });
     }
 
-    res.json({ success: true, data: post });
+    res.json({
+      success: true,
+      message: "Post deleted successfully",
+      data: post,
+    });
   } catch (error) {
     next(error);
   }
@@ -139,7 +155,11 @@ const undeletePost = async (req, res, next) => {
         .json({ success: false, message: "Post not found" });
     }
 
-    res.json({ success: true, data: post });
+    res.json({
+      success: true,
+      message: "Post undeleted successfully",
+      data: post,
+    });
   } catch (error) {
     next(error);
   }
