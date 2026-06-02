@@ -37,7 +37,11 @@ const userValidators = [
 const getAllUsers = async (req, res, next) => {
   try {
     const users = await userRepository.getAllUsers();
-    res.json({ success: true, data: users });
+    res.json({
+      success: true,
+      message: "Users found successfully",
+      data: users,
+    });
   } catch (error) {
     next(error);
   }
@@ -55,7 +59,7 @@ const getUserById = async (req, res, next) => {
       return res.status(404).json({ success: false, message: "User not found" });
     }
 
-    res.json({ success: true, data: user });
+    res.json({ success: true, message: "User found successfully", data: user });
   } catch (error) {
     next(error);
   }
@@ -80,7 +84,11 @@ const createUser = async (req, res, next) => {
       role: role ?? "USER",
     });
 
-    res.status(201).json({ success: true, data: user });
+    res.status(201).json({
+      success: true,
+      message: "User created successfully",
+      data: user,
+    });
   } catch (error) {
     next(error);
   }
@@ -109,7 +117,11 @@ const updateUser = async (req, res, next) => {
       role: role ?? "USER",
     });
 
-    res.json({ success: true, data: user });
+    res.json({
+      success: true,
+      message: "User updated successfully",
+      data: user,
+    });
   } catch (error) {
     next(error);
   }
@@ -127,7 +139,11 @@ const deleteUser = async (req, res, next) => {
       return res.status(404).json({ success: false, message: "User not found" });
     }
 
-    res.json({ success: true, data: user });
+    res.json({
+      success: true,
+      message: "User deleted successfully",
+      data: user,
+    });
   } catch (error) {
     next(error);
   }
@@ -149,7 +165,11 @@ const undeleteUser = async (req, res, next) => {
         .json({ success: false, message: "User not found" });
     }
 
-    res.json({ success: true, data: user });
+    res.json({
+      success: true,
+      message: "User undeleted successfully",
+      data: user,
+    });
   } catch (error) {
     next(error);
   }
