@@ -90,14 +90,14 @@ const updatePost = async (req, res, next) => {
       return res.status(400).json({ success: false, message: "Invalid post ID" });
     }
 
-    const { title, content } = matchedData(req);
+    const { title, content, authorId, categories } = matchedData(req);
 
     const post = await postRepository.updatePost({
       postId,
       title,
       content,
-      categories: req.body.categories,
-      authorId: parseInt(req.user.id),
+      authorId,
+      categories,
     });
 
     return res.json({
