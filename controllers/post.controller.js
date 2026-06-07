@@ -16,6 +16,9 @@ const postValidators = [
     .isLength({ min: 20 })
     .withMessage("Content must be minimum 20 characters")
     .escape(),
+  body("authorId").notEmpty().isInt(),
+  body("categories").optional().isArray(),
+  body("categories.*").isInt(),
 ];
 
 const getAllPosts = async (req, res, next) => {
@@ -35,16 +38,12 @@ const getPostById = async (req, res, next) => {
   try {
     const postId = parseInt(req.params.postId);
     if (isNaN(postId)) {
-      return res
-        .status(400)
-        .json({ success: false, message: "Invalid post ID" });
+      return res.status(400).json({ success: false, message: "Invalid post ID" });
     }
 
     const post = await postRepository.getPostById(postId);
     if (!post) {
-      return res
-        .status(404)
-        .json({ success: false, message: "Post not found" });
+      return res.status(404).json({ success: false, message: "Post not found" });
     }
 
     res.json({ success: true, message: "Post found successfully", data: post });
@@ -60,13 +59,13 @@ const createPost = async (req, res, next) => {
       return res.status(400).json({ success: false, errors: errors.array() });
     }
 
-    const { title, content } = matchedData(req);
+    const { title, content, authorId, categories } = matchedData(req);
 
     const post = await postRepository.createPost({
       title,
       content,
-      categories: req.body.categories,
-      authorId: parseInt(req.user.id),
+      authorId,
+      categories,
     });
 
     return res.status(201).json({
@@ -88,9 +87,7 @@ const updatePost = async (req, res, next) => {
 
     const postId = parseInt(req.params.postId);
     if (isNaN(postId)) {
-      return res
-        .status(400)
-        .json({ success: false, message: "Invalid post ID" });
+      return res.status(400).json({ success: false, message: "Invalid post ID" });
     }
 
     const { title, content } = matchedData(req);
@@ -117,16 +114,12 @@ const deletePost = async (req, res, next) => {
   try {
     const postId = parseInt(req.params.postId);
     if (isNaN(postId)) {
-      return res
-        .status(400)
-        .json({ success: true, message: "Invalid post ID" });
+      return res.status(400).json({ success: true, message: "Invalid post ID" });
     }
 
     const post = await postRepository.deletePost(postId);
     if (!post) {
-      return res
-        .status(404)
-        .json({ success: false, message: "Post not found" });
+      return res.status(404).json({ success: false, message: "Post not found" });
     }
 
     res.json({
@@ -143,16 +136,12 @@ const undeletePost = async (req, res, next) => {
   try {
     const postId = parseInt(req.params.postId);
     if (isNaN(postId)) {
-      return res
-        .status(400)
-        .json({ success: true, message: "Invalid post ID" });
+      return res.status(400).json({ success: true, message: "Invalid post ID" });
     }
 
     const post = await postRepository.undeletePost(postId);
     if (!post) {
-      return res
-        .status(404)
-        .json({ success: false, message: "Post not found" });
+      return res.status(404).json({ success: false, message: "Post not found" });
     }
 
     res.json({
