@@ -19,8 +19,16 @@ const getPostById = async (postId) => {
 
 const createPost = async ({ title, content, authorId, categories }) => {
   const post = await prisma.post.create({
-    data: { title, content, authorId, categories },
-    include: { categories: true },
+    data: {
+      title,
+      content,
+      author: {
+        connect: { id: authorId },
+      },
+      categories: {
+        connect: categories?.map((categoryId) => ({ id: categoryId })) ?? [],
+      },
+    },
   });
 
   return post;
@@ -60,5 +68,5 @@ export default {
   createPost,
   updatePost,
   deletePost,
-  undeletePost
+  undeletePost,
 };
