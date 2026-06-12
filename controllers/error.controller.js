@@ -1,6 +1,7 @@
 const getErrorStatusCode = (err) => {
   if (err.code === "P2025") return 404;
   if (err.code === "P2002") return 409;
+  if (err.message === "Unauthorized") return 401;
 
   return Number(err.statusCode) || err.status || 500;
 };
