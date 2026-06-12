@@ -5,6 +5,7 @@ import { Router } from "express";
 
 const router = Router();
 
+router.get("/status", authController.verify, authController.status);
 router.post("/login", authController.login);
 router.post("/logout", authController.verify, authController.logout);
 
