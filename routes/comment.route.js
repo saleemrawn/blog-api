@@ -5,6 +5,7 @@ import { Router } from "express";
 const router = Router();
 
 router.get("/:postId/comments", commentController.getComments);
+router.get("/:postId/comments/count", commentController.getCommentsCount);
 
 router.post(
   "/:postId/comments",

@@ -8,6 +8,14 @@ const getComments = async (postId) => {
   return comments;
 };
 
+const getCommentsCount = async (postId) => {
+  const count = await prisma.comment.count({
+    where: { postId },
+  });
+
+  return count;
+};
+
 const createComment = async ({ postId, authorId, content }) => {
   const comment = await prisma.comment.create({
     data: {
@@ -49,6 +57,7 @@ const undeleteComment = async (commentId) => {
 
 export default {
   getComments,
+  getCommentsCount,
   createComment,
   updateComment,
   deleteComment,

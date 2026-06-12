@@ -29,6 +29,20 @@ const getComments = async (req, res, next) => {
   }
 };
 
+const getCommentsCount = async (req, res, next) => {
+  try {
+    const postId = parseInt(req.params.postId);
+    if (isNaN(postId)) {
+      return res.status(400).json({ success: false, message: "Invalid post ID" });
+    }
+
+    const count = await commentRepository.getCommentsCount(postId);
+    res.json({ success: true, data: count });
+  } catch (err) {
+    next(err);
+  }
+};
+
 const createComment = async (req, res, next) => {
   try {
     const postId = parseInt(req.params.postId);
@@ -148,6 +162,7 @@ const undeleteComment = async (req, res, next) => {
 };
 export default {
   getComments,
+  getCommentsCount,
   createComment,
   updateComment,
   deleteComment,
