@@ -55,8 +55,13 @@ const verify = async (req, res, next) => {
   }
 };
 
+const status = (req, res) => {
+  res.json({ user: req.user });
+};
+
 export default {
   login,
   logout,
   verify,
+  status,
 };
