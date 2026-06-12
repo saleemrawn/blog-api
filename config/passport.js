@@ -50,6 +50,8 @@ passport.use(
       return done(null, {
         id: user.id,
         username: user.username,
+        firstName: user.firstName,
+        lastName: user.lastName,
         fullName: user.fullName,
         role: user.role,
         deletedAt: user.deletedAt,
