@@ -1,5 +1,13 @@
 import { prisma } from "../prisma/prisma.js";
 
+const getComments = async (postId) => {
+  const comments = await prisma.comment.findMany({
+    where: { postId },
+  });
+
+  return comments;
+};
+
 const createComment = async ({ postId, authorId, content }) => {
   const comment = await prisma.comment.create({
     data: {
@@ -40,6 +48,7 @@ const undeleteComment = async (commentId) => {
 };
 
 export default {
+  getComments,
   createComment,
   updateComment,
   deleteComment,

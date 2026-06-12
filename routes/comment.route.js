@@ -4,6 +4,8 @@ import { Router } from "express";
 
 const router = Router();
 
+router.get("/:postId/comments", commentController.getComments);
+
 router.post(
   "/:postId/comments",
   authController.verify,
@@ -18,16 +20,8 @@ router.put(
   commentController.updateComment,
 );
 
-router.delete(
-  "/:postId/comments/:commentId",
-  authController.verify,
-  commentController.deleteComment,
-);
+router.delete("/:postId/comments/:commentId", authController.verify, commentController.deleteComment);
 
-router.patch(
-  "/:postId/comments/:commentId",
-  authController.verify,
-  commentController.undeleteComment,
-);
+router.patch("/:postId/comments/:commentId", authController.verify, commentController.undeleteComment);
 
 export default router;
