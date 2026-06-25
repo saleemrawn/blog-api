@@ -1,5 +1,5 @@
 import commentRepository from "../repositories/comment.repository.js";
-import { body, validationResult, matchedData } from "express-validator";
+import { body, validationResult, matchedData, param } from "express-validator";
 
 const commentValidators = [
   body("content")
@@ -9,6 +9,8 @@ const commentValidators = [
     .isLength({ min: 10 })
     .withMessage("Comment must be minimum 10 characters")
     .escape(),
+  body("authorId").isInt(),
+  param("postId").isInt(),
 ];
 
 const getComments = async (req, res, next) => {
@@ -55,23 +57,16 @@ const getCommentsCount = async (req, res, next) => {
 
 const createComment = async (req, res, next) => {
   try {
-    const postId = parseInt(req.params.postId);
-    if (isNaN(postId)) {
-      return res
-        .status(400)
-        .json({ success: false, message: "Invalid post ID" });
-    }
-
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ success: false, errors: errors.array() });
     }
 
-    const { content } = matchedData(req);
+    const { postId, authorId, content } = matchedData(req);
 
     const comment = await commentRepository.createComment({
-      postId,
-      authorId: req.user.id,
+      postId: Number(postId),
+      authorId: Number(authorId),
       content,
     });
 
