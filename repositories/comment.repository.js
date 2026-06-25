@@ -3,6 +3,17 @@ import { prisma } from "../prisma/prisma.js";
 const getComments = async (postId) => {
   const comments = await prisma.comment.findMany({
     where: { postId },
+    orderBy: {
+      createdAt: "desc",
+    },
+    include: {
+      author: {
+        select: {
+          id: true,
+          fullName: true,
+        },
+      },
+    },
   });
 
   return comments;
