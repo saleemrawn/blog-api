@@ -15,15 +15,23 @@ const getComments = async (req, res, next) => {
   try {
     const postId = parseInt(req.params.postId);
     if (isNaN(postId)) {
-      return res.status(400).json({ success: false, message: "Invalid post ID" });
+      return res
+        .status(400)
+        .json({ success: false, message: "Invalid post ID" });
     }
 
     const comments = await commentRepository.getComments(postId);
     if (!comments) {
-      return res.status(404).json({ success: false, message: "Comments not found" });
+      return res
+        .status(404)
+        .json({ success: false, message: "Comments not found" });
     }
 
-    res.json({ success: true, message: "Comments found successfully", data: comments });
+    res.json({
+      success: true,
+      message: "Comments found successfully",
+      data: comments,
+    });
   } catch (err) {
     next(err);
   }
@@ -33,7 +41,9 @@ const getCommentsCount = async (req, res, next) => {
   try {
     const postId = parseInt(req.params.postId);
     if (isNaN(postId)) {
-      return res.status(400).json({ success: false, message: "Invalid post ID" });
+      return res
+        .status(400)
+        .json({ success: false, message: "Invalid post ID" });
     }
 
     const count = await commentRepository.getCommentsCount(postId);
@@ -47,7 +57,9 @@ const createComment = async (req, res, next) => {
   try {
     const postId = parseInt(req.params.postId);
     if (isNaN(postId)) {
-      return res.status(400).json({ success: false, message: "Invalid post ID" });
+      return res
+        .status(400)
+        .json({ success: false, message: "Invalid post ID" });
     }
 
     const errors = validationResult(req);
@@ -58,8 +70,8 @@ const createComment = async (req, res, next) => {
     const { content } = matchedData(req);
 
     const comment = await commentRepository.createComment({
-      postId,
-      authorId: req.user.id,
+      postId: req.body.postId,
+      authorId: req.body.authorId,
       content,
     });
 
@@ -77,12 +89,16 @@ const updateComment = async (req, res, next) => {
   try {
     const postId = parseInt(req.params.postId);
     if (isNaN(postId)) {
-      return res.status(400).json({ success: false, message: "Invalid post ID" });
+      return res
+        .status(400)
+        .json({ success: false, message: "Invalid post ID" });
     }
 
     const commentId = parseInt(req.params.commentId);
     if (isNaN(commentId)) {
-      return res.status(400).json({ success: false, message: "Invalid comment ID" });
+      return res
+        .status(400)
+        .json({ success: false, message: "Invalid comment ID" });
     }
 
     const errors = validationResult(req);
@@ -111,17 +127,23 @@ const deleteComment = async (req, res, next) => {
   try {
     const postId = parseInt(req.params.postId);
     if (isNaN(postId)) {
-      return res.status(400).json({ success: false, message: "Invalid post ID" });
+      return res
+        .status(400)
+        .json({ success: false, message: "Invalid post ID" });
     }
 
     const commentId = parseInt(req.params.commentId);
     if (isNaN(commentId)) {
-      return res.status(400).json({ success: false, message: "Invalid comment ID" });
+      return res
+        .status(400)
+        .json({ success: false, message: "Invalid comment ID" });
     }
 
     const comment = await commentRepository.deleteComment(commentId);
     if (!comment) {
-      return res.status(404).json({ success: false, message: "Comment not found" });
+      return res
+        .status(404)
+        .json({ success: false, message: "Comment not found" });
     }
 
     res.json({
@@ -138,17 +160,23 @@ const undeleteComment = async (req, res, next) => {
   try {
     const postId = parseInt(req.params.postId);
     if (isNaN(postId)) {
-      return res.status(400).json({ success: false, message: "Invalid post ID" });
+      return res
+        .status(400)
+        .json({ success: false, message: "Invalid post ID" });
     }
 
     const commentId = parseInt(req.params.commentId);
     if (isNaN(commentId)) {
-      return res.status(400).json({ success: false, message: "Invalid comment ID" });
+      return res
+        .status(400)
+        .json({ success: false, message: "Invalid comment ID" });
     }
 
     const comment = await commentRepository.undeleteComment(commentId);
     if (!comment) {
-      return res.status(404).json({ success: false, message: "Comment not found" });
+      return res
+        .status(404)
+        .json({ success: false, message: "Comment not found" });
     }
 
     res.json({
