@@ -70,8 +70,8 @@ const createComment = async (req, res, next) => {
     const { content } = matchedData(req);
 
     const comment = await commentRepository.createComment({
-      postId: req.body.postId,
-      authorId: req.body.authorId,
+      postId,
+      authorId: req.user.id,
       content,
     });
 
