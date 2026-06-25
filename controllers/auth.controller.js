@@ -6,7 +6,9 @@ const login = (req, res, next) => {
     if (err) return next(err);
 
     if (!user) {
-      return res.json({ success: false, message: "Authentication Failed" });
+      return res
+        .status(401)
+        .json({ success: false, message: "Invalid username or password" });
     }
 
     const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
