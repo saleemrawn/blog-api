@@ -2,7 +2,7 @@ import { prisma } from "../prisma/prisma.js";
 
 const getComments = async (postId) => {
   const comments = await prisma.comment.findMany({
-    where: { postId },
+    where: { postId, deletedAt: null },
     orderBy: {
       createdAt: "desc",
     },
@@ -21,7 +21,7 @@ const getComments = async (postId) => {
 
 const getCommentsCount = async (postId) => {
   const count = await prisma.comment.count({
-    where: { postId },
+    where: { postId, deletedAt: null },
   });
 
   return count;
